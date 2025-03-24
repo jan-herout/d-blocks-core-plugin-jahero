@@ -7,12 +7,18 @@ from dblocks_core.model import config_model, plugin_model
 from rich.console import Console
 from rich.prompt import Prompt
 
-_VALID_SCENARIOS = ["drop", "create", "cleanup", "drop-only"]
+from dblocks_plugin.jahero_plugin import plug_config, plug_model
+
+_CREATE = "create"
+_DROP = "drop"
+_CLEANUP = "cleanup"
+_DROP_ONLY = "drop-only"
+
+_VALID_SCENARIOS = [_CREATE, _DROP, _DROP_ONLY, _CLEANUP]
 
 # regular expressions building blocks
 _WS = r"\s+"
 _MAYBE_WS = r"\s*"
-_CREATE = "create"
 _SET = "set +|multiset +"
 _TABLE = "table"
 _IDENTIFIER = "[a-z0-9_.]+"
@@ -142,7 +148,7 @@ def _change_to_conditional(
     file: Path,
     output_encoding: str,
     input_encoding: str,
-    create_or_drop="create",
+    create_or_drop=_DROP,
 ):
     try:
         old_script = _load_script(file, input_encoding)
@@ -178,7 +184,8 @@ def _change_to_conditional(
 
 class CC(plugin_model.PluginWalker):
     def __init__(self):
-        self.files = []
+        self.files: list[Path] = []
+        self.cc_abs_path: Path | None = None
 
     def before(
         self,
@@ -188,7 +195,7 @@ class CC(plugin_model.PluginWalker):
         **kwargs,
     ):
         """This function is executed before the walk starts."""
-        pass
+        self.cc_abs_path = path.absolute()
 
     def walker(
         self,
@@ -200,7 +207,7 @@ class CC(plugin_model.PluginWalker):
         """This function is executed for each file we walk through."""
         ext = path.suffix.lower()
         if ext in (".bteq", ".sql"):
-            self.files.append(path)
+            self.files.append(path.absolute())
 
     def after(
         self,
@@ -209,14 +216,12 @@ class CC(plugin_model.PluginWalker):
         cfg: config_model.Config,
         **kwargs,
     ):
-        self._conditional_create()
+        plug_cfg = plug_config.load_config(path)
+        self._conditional_create(plug_cfg)
 
     def _conditional_create(
         self,
-        scenario="create",
-        input_encoding: str = "utf-8",
-        output_encoding: str = "utf-8",
-        max_files: int = 20,
+        cfg: plug_model.PluginConfig,
     ):
         """
         Scans a folder for files with .sql or .bteq extension, and tries to insert conditional create header and footer in them.
@@ -233,6 +238,7 @@ class CC(plugin_model.PluginWalker):
             ContentError: raised when number of files is too great, or when one of the files can not be patched.
         """
         files = self.files
+        max_files = cfg.cc.max_files
         if len(files) > max_files:
             console = Console()
             console.print(f"Expected to get at max {max_files}, got {len(files)}")
@@ -240,6 +246,13 @@ class CC(plugin_model.PluginWalker):
             if answer != "Y":
                 console.print("Canceled.", style="bold red")
                 return
-
-        for f in files:
-            _change_to_conditional(f, output_encoding, input_encoding, scenario)
+        for cc in cfg.cc.conditionals:
+            cc_abs_path = self.cc_abs_path / cc.path
+            for f in files:
+                if f.is_relative_to(cc_abs_path):
+                    _change_to_conditional(
+                        f,
+                        cc.output_encoding,
+                        cc.input_encoding,
+                        cc.scenario,
+                    )

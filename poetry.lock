@@ -70,13 +70,13 @@ files = [
 
 [[package]]
 name = "d-blocks-core"
-version = "0.9.3.8"
+version = "0.9.3.9"
 description = ""
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "d_blocks_core-0.9.3.8-py3-none-any.whl", hash = "sha256:d76c67c79ddc8a861d5ede01cbdb6fc99b24c3591aa0afcfb75ad90b9d069b59"},
-    {file = "d_blocks_core-0.9.3.8.tar.gz", hash = "sha256:6db2d88ea7f7635ca1f469f0ac4a8499371d248aa307d30a3fbd87b3b2c655e0"},
+    {file = "d_blocks_core-0.9.3.9-py3-none-any.whl", hash = "sha256:d1632140a5c67749ae03cde8e3a3cd58df59943cbfcb11b0639b1b9e4fa58a88"},
+    {file = "d_blocks_core-0.9.3.9.tar.gz", hash = "sha256:4733dc403706772b73e377e0c7557282169e0edb58b496fe686ac41a3a50a51c"},
 ]
 
 [package.dependencies]
@@ -584,4 +584,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11"
-content-hash = "7ddbbcb722667a22fedfd13cf880d0370db30b84a1c22959344041396aca7681"
+content-hash = "425997746b1fe115d9d14a6ab02ad8c905fdc502743d6d67558566422619a098"

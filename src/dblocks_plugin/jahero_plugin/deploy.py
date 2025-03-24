@@ -134,10 +134,7 @@ def case_insensitive_search(root: Path, subdir: Path) -> Path | None:
         if not found:
             return None
 
-    retval = Path("")
-    for d in found_dirs:
-        retval = retval / d
-    return retval
+    return Path(*found_dirs)
 
 
 def _path_to_directories(path: Path) -> list[str]:

@@ -54,5 +54,14 @@ def make_default_config() -> plug_model.PluginConfig:
             plug_model.Replacement(replace_from="^EP_(.*)$", replace_to=(r"ED0_\1")),
             plug_model.Replacement(replace_from="^AP_(.*)$", replace_to=(r"AD0_\1")),
             plug_model.Replacement(replace_from="^VP_(.*)$", replace_to=(r"VD0_\1")),
-        ]
+        ],
+        cc=plug_model.ConditionalCreate(
+            max_files=50,
+            conditionals=[
+                plug_model.ConditionalCreate(
+                    path="DB/Teradata/01-copy-source-ddl-tbl",
+                    scenario=plug_model.DROP,
+                )
+            ],
+        ),
     )
