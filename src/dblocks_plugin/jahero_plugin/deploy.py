@@ -1,16 +1,15 @@
+import re
 import stat
-import tomllib
 from pathlib import Path
 from textwrap import dedent
 
-from attrs import field, frozen
 from dblocks_core import exc
 from dblocks_core.config import config
 from dblocks_core.config.config import logger
 from dblocks_core.deployer import fsequencer
 from dblocks_core.model import config_model, plugin_model
 
-from dblocks_plugin.jahero_plugin import plug_config
+from dblocks_plugin.jahero_plugin import plug_config, plug_model
 
 
 class Dpl(plugin_model.PluginWalker):
@@ -63,7 +62,7 @@ class Dpl(plugin_model.PluginWalker):
         log_dir.mkdir(exist_ok=True, parents=True)
 
         for step in self.batch.steps:
-            logger.info(f"+-+ creating step: {step.name}")
+            logger.info(f"creating step: {step.name}")
             statements, prev_db = [], None
 
             # skip empty steps
@@ -78,7 +77,7 @@ class Dpl(plugin_model.PluginWalker):
                 db = f.default_db
 
                 if db is not None and db != prev_db:
-                    statements.append(f"\ndatabase {_get_database(db)};")
+                    statements.append(f"\ndatabase {_get_database(db, plug_cfg)};")
                 statements.append(f".run file = '{f.file.as_posix()}'")
 
                 prev_db = db
@@ -197,14 +196,6 @@ def _path_to_directories(path: Path) -> list[str]:
     return elements
 
 
-def _get_deploy_statements(f: Path) -> list[str]:
-    return [f".run file='{f.as_posix()}'"]
-
-
-def _get_database(db: str) -> str:
-    return db
-
-
 def _get_header() -> str:
     return dedent(
         """
@@ -244,6 +235,17 @@ def _get_bteq_call(f: Path) -> str:
         fi           
     """
     )
+
+
+def _get_database(db: str, cfg: plug_model.PluginConfig) -> str:
+    for replacement in cfg.replacements:
+        db = re.sub(
+            replacement.replace_from,
+            replacement.replace_to,
+            db,
+            flags=re.I | re.X,
+        )
+    return db
 
 
 if __name__ == "__main__":

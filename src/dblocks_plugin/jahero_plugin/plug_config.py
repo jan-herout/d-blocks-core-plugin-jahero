@@ -47,7 +47,12 @@ def write_default_config(file: Path):
 def make_default_config() -> plug_model.PluginConfig:
     return plug_model.PluginConfig(
         replacements=[
+            plug_model.Replacement(
+                replace_from="^EP_CVM(.*)$",
+                replace_to=(r"ED1_CVM\1"),
+            ),
             plug_model.Replacement(replace_from="^EP_(.*)$", replace_to=(r"ED0_\1")),
             plug_model.Replacement(replace_from="^AP_(.*)$", replace_to=(r"AD0_\1")),
+            plug_model.Replacement(replace_from="^VP_(.*)$", replace_to=(r"VD0_\1")),
         ]
     )
