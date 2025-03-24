@@ -78,7 +78,7 @@ class Dpl(plugin_model.PluginWalker):
 
                 if db is not None and db != prev_db:
                     statements.append(f"\ndatabase {_get_database(db, plug_cfg)};")
-                statements.append(f".run file = '{f.file.as_posix()}'")
+                statements.append(f".run file = '{f.file.absolute().as_posix()}'")
 
                 prev_db = db
 
@@ -111,48 +111,6 @@ class Dpl(plugin_model.PluginWalker):
         **kwargs,
     ):
         pass
-
-
-def main():
-    path = Path("/home/jan/o2/feature/bidev-7434-vodwh-na/gen-sk/output")
-    plugin = "dpl"
-    environment = None
-    cfg_dict = config.load_config_dict()
-    cfg = config.load_config()
-
-    path_ = Path(path)
-
-    walker = Dpl()
-    if path_.exists():
-        if path_.is_file():
-            walker.walker(
-                path_,
-                environment,
-                cfg,  # kwargs
-                cfg_dict=cfg_dict,
-            )
-        elif path_.is_dir():
-            for f in path_.rglob("*.*"):
-                walker.walker(
-                    f,
-                    environment,
-                    cfg,  # kwargs
-                    cfg_dict=cfg_dict,
-                )
-    walker.before(
-        path_,
-        environment,
-        cfg,
-        # kwargs
-        cfg_dict=cfg_dict,
-    )
-    walker.after(
-        path_,
-        environment,
-        cfg,
-        # kwargs
-        cfg_dict=cfg_dict,
-    )
 
 
 def case_insensitive_search(root: Path, subdir: Path) -> Path | None:
@@ -226,7 +184,7 @@ def _get_bteq_call(f: Path) -> str:
     return dedent(
         f"""
         echo "running {stem}"
-        bteq < {f.as_posix()} &>>{log_file.as_posix()}
+        bteq < {f.absolute().as_posix()} &>>{log_file.absolute().as_posix()}
         retval=$?
         if [ $retval -ne 0 ]; then
             echo "===============ERROR================="
@@ -246,7 +204,3 @@ def _get_database(db: str, cfg: plug_model.PluginConfig) -> str:
             flags=re.I | re.X,
         )
     return db
-
-
-if __name__ == "__main__":
-    main()
