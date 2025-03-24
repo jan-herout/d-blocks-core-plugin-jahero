@@ -1,12 +1,11 @@
 import re
 from pathlib import Path
 
+from dblocks_core import exc
 from dblocks_core.config.config import logger
 from dblocks_core.model import config_model, plugin_model
 from rich.console import Console
 from rich.prompt import Prompt
-
-from dblocks_core import exc
 
 _VALID_SCENARIOS = ["drop", "create", "cleanup", "drop-only"]
 
@@ -47,7 +46,6 @@ _PATTERN2 = (
 # regular expressions used to find what is needed
 _re_create = re.compile(_PATTERN, re.I)
 _re_create2 = re.compile(_PATTERN2, re.I)
-_re_condition = re.compile(r"\/\*--conditional_create--\*\/", re.I)
 
 
 # the template inected into SQL files
@@ -209,6 +207,7 @@ class CC(plugin_model.PluginWalker):
         path: Path,
         environment: str | None,
         cfg: config_model.Config,
+        **kwargs,
     ):
         self._conditional_create()
 
@@ -244,8 +243,3 @@ class CC(plugin_model.PluginWalker):
 
         for f in files:
             _change_to_conditional(f, output_encoding, input_encoding, scenario)
-
-
-PLUGINS = [
-    CC(),
-]
