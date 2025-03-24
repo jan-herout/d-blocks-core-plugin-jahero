@@ -198,7 +198,7 @@ class CC(plugin_model.PluginWalker):
         **kwargs,
     ):
         """This function is executed for each file we walk through."""
-        ext = self.suffix.lower()
+        ext = path.suffix.lower()
         if ext in (".bteq", ".sql"):
             self.files.append(path)
 
