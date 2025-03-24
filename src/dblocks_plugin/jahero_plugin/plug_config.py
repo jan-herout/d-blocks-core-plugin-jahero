@@ -58,9 +58,11 @@ def make_default_config() -> plug_model.PluginConfig:
         cc=plug_model.ConditionalCreate(
             max_files=50,
             conditionals=[
-                plug_model.ConditionalCreate(
+                plug_model.ConditionalCreatePath(
                     path="DB/Teradata/01-copy-source-ddl-tbl",
                     scenario=plug_model.DROP,
+                    input_encoding="utf-8",
+                    output_encoding="utf-8",
                 )
             ],
         ),
