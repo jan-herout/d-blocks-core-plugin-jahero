@@ -71,7 +71,7 @@ class Dpl(plugin_model.PluginWalker):
                 continue
 
             bteq_file = deployment_dir / (step.name + ".bteq")
-            exec_scripts.append(_get_bteq_call(bteq_file))
+            exec_scripts.append(_get_bteq_call(bteq_file, log_dir))
 
             for f in step.files:
                 db = f.default_db
@@ -178,9 +178,9 @@ def _get_footer() -> str:
     return ""
 
 
-def _get_bteq_call(f: Path) -> str:
+def _get_bteq_call(f: Path, log_dir: Path) -> str:
     name, stem = f.name, f.stem
-    log_file = f.parent / "log" / f"{stem}.log"
+    log_file = log_dir / f"{stem}.log"
     return dedent(
         f"""
         echo "running {stem}"
