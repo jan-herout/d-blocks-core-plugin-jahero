@@ -62,5 +62,5 @@ class ConditionalCreate:
 
 @frozen
 class PluginConfig:
+    cc: ConditionalCreate = field(factory=ConditionalCreate)
     replacements: list[Replacement] = field(factory=list)
-    cc: ConditionalCreate
