@@ -36,11 +36,13 @@ def write_default_config(file: Path):
         )
         != "Y"
     ):
+        console.print("Canceled.", stuůe="bold red")
         return
 
     cfg = make_default_config()
     data = cattr.unstructure(cfg)
     string = tomlkit.dumps(data, sort_keys=True)
+    console.print(f"Write to file: {file.as_posix()}")
     file.write_text(string, encoding="utf-8")
 
 
