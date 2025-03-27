@@ -23,7 +23,21 @@ class Dpl(plugin_model.PluginWalker):
         cfg: config_model.Config,
         **kwargs,
     ):
-        """This function is executed before the walk starts."""
+    """
+    Prepare the deployment process before the walk starts.
+
+    This method initializes the deployment batch, creates necessary directories,
+    and generates deployment scripts based on the steps defined in the batch.
+
+    Args:
+        path (Path): The root path of the deployment package.
+        environment (str | None): The target environment for the deployment.
+        cfg (config_model.Config): The configuration object for the deployment.
+        **kwargs: Additional keyword arguments.
+
+    Raises:
+        exc.DOperationsError: If required directories or steps are missing.
+    """
         # get plugin config
         plug_cfg = plug_config.load_config(path)
 
@@ -114,6 +128,26 @@ class Dpl(plugin_model.PluginWalker):
 
 
 def case_insensitive_search(root: Path, subdir: Path) -> Path | None:
+    """
+    Perform a case-insensitive search for a subdirectory within a root directory.
+
+    This function attempts to locate a subdirectory path within the given root
+    directory, ignoring case sensitivity. It traverses the directory structure
+    step by step, matching each part of the subdirectory path against the
+    available directories in a case-insensitive manner.
+
+    Args:
+        root (Path): The root directory where the search begins.
+        subdir (Path): The subdirectory path to search for.
+
+    Returns:
+        Path | None: The resolved path to the subdirectory if found, or None if
+        the subdirectory does not exist.
+
+    Logs:
+        Logs the search process, including the directories being searched and
+        the target subdirectory path.
+    """
     wanted = _path_to_directories(subdir)
     wanted = [s.lower() for s in wanted]
     logger.info(f"searching in: {root}")

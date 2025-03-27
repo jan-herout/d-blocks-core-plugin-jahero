@@ -11,6 +11,17 @@ VALID_SCENARIOS = [CREATE, DROP, DROP_ONLY, CLEANUP]
 
 
 def _assert_valid_cc_scenario(self, attribute, value):
+    """
+    Validate that the provided value is a valid conditional create scenario.
+
+    Args:
+        self: The instance of the class where this validator is used.
+        attribute: The attribute being validated.
+        value: The value to validate.
+
+    Raises:
+        ValueError: If the value is not a string or not in the list of valid scenarios.
+    """
     if not isinstance(value, str):
         err = ValueError(f"string expected, got: {str(type(value))}")
         logger.error(err)
@@ -25,6 +36,17 @@ def _assert_valid_cc_scenario(self, attribute, value):
 
 
 def _assert_not_empty_string(self, attribute, value):
+    """
+    Validate that the provided value is a non-empty string without whitespace.
+
+    Args:
+        self: The instance of the class where this validator is used.
+        attribute: The attribute being validated.
+        value: The value to validate.
+
+    Raises:
+        ValueError: If the value is not a string, is empty, or contains whitespace.
+    """
     if not isinstance(value, str):
         err = ValueError(f"string expected, got: {str(type(value))}")
         logger.error(err)

@@ -13,6 +13,23 @@ CONFIG_FILE_NAME = "dblocks-jahero-plugin.toml"
 
 
 def load_config(from_dir: Path) -> plug_model.PluginConfig:
+    """
+    Load the plugin configuration from a specified directory.
+
+    This function checks if the configuration file exists in the given directory.
+    If the file does not exist, it writes a default configuration file and raises
+    a `DConfigError`. If the file exists, it reads and parses the configuration
+    file into a `PluginConfig` object.
+
+    Args:
+        from_dir (Path): The directory where the configuration file is expected to be located.
+
+    Returns:
+        plug_model.PluginConfig: The parsed configuration object.
+
+    Raises:
+        exc.DConfigError: If the configuration file is not found in the specified directory.
+    """
     # check that the file exists
     config_file = from_dir / CONFIG_FILE_NAME
     if not config_file.is_file():
@@ -27,6 +44,19 @@ def load_config(from_dir: Path) -> plug_model.PluginConfig:
 
 
 def write_default_config(file: Path):
+    """
+    Create a default configuration file if it does not exist.
+
+    This function prompts the user to confirm whether they want to create a default
+    configuration file. If the user agrees, it generates a default configuration,
+    serializes it to TOML format, and writes it to the specified file.
+
+    Args:
+        file (Path): The path where the default configuration file will be created.
+
+    Returns:
+        None
+    """
     cnsl = console.Console()
     cnsl.print("Config file not found", style="bold red")
     cnsl.print(file.as_posix(), style="green")
@@ -47,6 +77,17 @@ def write_default_config(file: Path):
 
 
 def make_default_config() -> plug_model.PluginConfig:
+    """
+    Generate a default plugin configuration.
+
+    This function creates a default `PluginConfig` object with predefined
+    replacements and conditional creation settings. The configuration includes
+    rules for replacing patterns in strings and conditions for creating files
+    in specific paths.
+
+    Returns:
+        plug_model.PluginConfig: The default plugin configuration object.
+    """
     return plug_model.PluginConfig(
         replacements=[
             plug_model.Replacement(
