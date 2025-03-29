@@ -152,7 +152,7 @@ def _change_to_conditional(
 ):
     try:
         old_script = _load_script(file, input_encoding)
-    except UnicodeDecodeError as e:
+    except UnicodeDecodeError:
         raise exc.DOperationsError(f"encoding error: {file.as_posix()}")
 
     is_create, creates_table = _is_create_script(old_script, file)

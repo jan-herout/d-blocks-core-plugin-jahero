@@ -4,7 +4,6 @@ from pathlib import Path
 from textwrap import dedent
 
 from dblocks_core import exc
-from dblocks_core.config import config
 from dblocks_core.config.config import logger
 from dblocks_core.deployer import fsequencer
 from dblocks_core.model import config_model, plugin_model
@@ -23,21 +22,21 @@ class Dpl(plugin_model.PluginWalker):
         cfg: config_model.Config,
         **kwargs,
     ):
-    """
-    Prepare the deployment process before the walk starts.
+        """
+        Prepare the deployment process before the walk starts.
 
-    This method initializes the deployment batch, creates necessary directories,
-    and generates deployment scripts based on the steps defined in the batch.
+        This method initializes the deployment batch, creates necessary directories,
+        and generates deployment scripts based on the steps defined in the batch.
 
-    Args:
-        path (Path): The root path of the deployment package.
-        environment (str | None): The target environment for the deployment.
-        cfg (config_model.Config): The configuration object for the deployment.
-        **kwargs: Additional keyword arguments.
+        Args:
+            path (Path): The root path of the deployment package.
+            environment (str | None): The target environment for the deployment.
+            cfg (config_model.Config): The configuration object for the deployment.
+            **kwargs: Additional keyword arguments.
 
-    Raises:
-        exc.DOperationsError: If required directories or steps are missing.
-    """
+        Raises:
+            exc.DOperationsError: If required directories or steps are missing.
+        """
         # get plugin config
         plug_cfg = plug_config.load_config(path)
 
@@ -210,7 +209,7 @@ def _get_footer() -> str:
 
 
 def _get_bteq_call(f: Path, log_dir: Path) -> str:
-    name, stem = f.name, f.stem
+    stem = f.stem
     log_file = log_dir / f"{stem}.log"
     return dedent(
         f"""
@@ -221,7 +220,7 @@ def _get_bteq_call(f: Path, log_dir: Path) -> str:
             echo "===============ERROR================="
             echo "====================================="
             exit $retval
-        fi           
+        fi
     """
     )
 

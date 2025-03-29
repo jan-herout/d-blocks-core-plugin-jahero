@@ -62,7 +62,8 @@ def write_default_config(file: Path):
     cnsl.print(file.as_posix(), style="green")
     if (
         prompt.Prompt().ask(
-            "Do you want to create file with default config? [Y/n]", default="Y"
+            "Do you want to create file with default config? [Y/n]",
+            default="Y",
         )
         != "Y"
     ):
