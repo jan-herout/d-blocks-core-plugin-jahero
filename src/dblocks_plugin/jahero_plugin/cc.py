@@ -3,7 +3,7 @@ from pathlib import Path
 
 from dblocks_core import exc
 from dblocks_core.config.config import logger
-from dblocks_core.model import config_model, plugin_model
+from dblocks_core.model import plugin_model
 from rich.console import Console
 from rich.prompt import Prompt
 
@@ -191,7 +191,6 @@ class CC(plugin_model.PluginWalker):
         self,
         path: Path,
         environment: str | None,
-        cfg: config_model.Config,
         **kwargs,
     ):
         """This function is executed before the walk starts."""
@@ -201,7 +200,6 @@ class CC(plugin_model.PluginWalker):
         self,
         path: Path,
         environment: str | None,
-        cfg: config_model.Config,
         **kwargs,
     ):
         """This function is executed for each file we walk through."""
@@ -213,7 +211,6 @@ class CC(plugin_model.PluginWalker):
         self,
         path: Path,
         environment: str | None,
-        cfg: config_model.Config,
         **kwargs,
     ):
         plug_cfg = plug_config.load_config(path)

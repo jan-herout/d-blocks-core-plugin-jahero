@@ -60,14 +60,14 @@ def write_default_config(file: Path):
     cnsl = console.Console()
     cnsl.print("Config file not found", style="bold red")
     cnsl.print(file.as_posix(), style="green")
-    if (
-        prompt.Prompt().ask(
+    answer = ""
+    while answer not in ("Y", "n"):
+        answer = prompt.Prompt().ask(
             "Do you want to create file with default config? [Y/n]",
             default="Y",
         )
-        != "Y"
-    ):
-        console.print("Canceled.", stuůe="bold red")
+    if answer != "Y":
+        console.print("Canceled.", style="bold red")
         return
 
     cfg = make_default_config()
