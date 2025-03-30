@@ -19,7 +19,6 @@ class Dpl(plugin_model.PluginWalker):
         self,
         path: Path,
         environment: str | None,
-        cfg: config_model.Config,
         **kwargs,
     ):
         """
@@ -111,7 +110,6 @@ class Dpl(plugin_model.PluginWalker):
         self,
         path: Path,
         environment: str | None,
-        cfg: config_model.Config,
         **kwargs,
     ):
         pass
@@ -120,7 +118,6 @@ class Dpl(plugin_model.PluginWalker):
         self,
         path: Path,
         environment: str | None,
-        cfg: config_model.Config,
         **kwargs,
     ):
         pass
