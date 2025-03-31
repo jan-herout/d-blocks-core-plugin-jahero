@@ -73,7 +73,8 @@ def write_default_config(file: Path):
     cfg = make_default_config()
     data = cattr.unstructure(cfg)
     string = tomlkit.dumps(data, sort_keys=True)
-    console.print(f"Write to file: {file.as_posix()}")
+    cns = console.Console()
+    cns.print(f"Write to file: {file.as_posix()}")
     file.write_text(string, encoding="utf-8")
 
 
