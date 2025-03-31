@@ -34,7 +34,7 @@ def load_config(from_dir: Path) -> plug_model.PluginConfig:
     config_file = from_dir / CONFIG_FILE_NAME
     if not config_file.is_file():
         write_default_config(config_file)
-        raise exc.DConfigError(f"config not found: {config_file}")
+        return
 
     # load it
     logger.info(f"read config from {config_file}")
