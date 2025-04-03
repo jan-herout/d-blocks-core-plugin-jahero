@@ -30,7 +30,6 @@ class Dpl(plugin_model.PluginWalker):
         Args:
             path (Path): The root path of the deployment package.
             environment (str | None): The target environment for the deployment.
-            cfg (config_model.Config): The configuration object for the deployment.
             **kwargs: Additional keyword arguments.
 
         Raises:
@@ -40,7 +39,7 @@ class Dpl(plugin_model.PluginWalker):
         plug_cfg = plug_config.load_config(path)
 
         # deploy
-        pkg_cfg = cfg.packager
+        pkg_cfg = self.cfg.packager
         if pkg_cfg.case_insensitive_dirs:
             logger.info("case insensitive search")
             subdirs = case_insensitive_search(path, pkg_cfg.steps_subdir)
