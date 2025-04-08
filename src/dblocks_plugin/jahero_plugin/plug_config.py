@@ -33,6 +33,7 @@ def load_config(from_dir: Path) -> plug_model.PluginConfig:
     # check that the file exists
     config_file = from_dir / CONFIG_FILE_NAME
     if not config_file.is_file():
+        logger.warning(f"config file not found: {config_file.as_posix()}")
         write_default_config(config_file)
         return
 
@@ -58,10 +59,12 @@ def write_default_config(file: Path):
         None
     """
     cnsl = console.Console()
-    cnsl.print("Config file not found", style="bold red")
     cnsl.print(file.as_posix(), style="green")
     answer = ""
+
     while answer not in ("Y", "n"):
+        cnsl.print("We will create default config to file: ", style="bold blue", end="")
+        cnsl.print(file.as_posix())
         answer = prompt.Prompt().ask(
             "Do you want to create file with default config? [Y/n]",
             default="Y",
@@ -75,6 +78,7 @@ def write_default_config(file: Path):
     string = tomlkit.dumps(data, sort_keys=True)
     cns = console.Console()
     cns.print(f"Write to file: {file.as_posix()}")
+    file.parent.mkdir(exist_ok=True, parents=True)
     file.write_text(string, encoding="utf-8")
 
 
