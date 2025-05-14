@@ -1,3 +1,4 @@
+import sys
 import tomllib
 from pathlib import Path
 
@@ -33,9 +34,10 @@ def load_config(from_dir: Path) -> plug_model.PluginConfig:
     # check that the file exists
     config_file = from_dir / CONFIG_FILE_NAME
     if not config_file.is_file():
-        logger.warning(f"config file not found: {config_file.as_posix()}")
+        msg = f"config file not found: {config_file.as_posix()}"
+        logger.warning(msg)
         write_default_config(config_file)
-        return
+        raise exc.DOperationsError(f"config file not found: {config_file.as_posix()}")
 
     # load it
     logger.info(f"read config from {config_file}")
@@ -71,7 +73,7 @@ def write_default_config(file: Path):
         )
     if answer != "Y":
         console.print("Canceled.", style="bold red")
-        return
+        raise exc.DConfigError("missing plugin config")
 
     cfg = make_default_config()
     data = cattr.unstructure(cfg)
@@ -80,6 +82,7 @@ def write_default_config(file: Path):
     cns.print(f"Write to file: {file.as_posix()}")
     file.parent.mkdir(exist_ok=True, parents=True)
     file.write_text(string, encoding="utf-8")
+    raise exc.DConfigError("plugin config was just created, please try again")
 
 
 def make_default_config() -> plug_model.PluginConfig:
