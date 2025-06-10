@@ -8,6 +8,7 @@ DROP = "drop"
 CLEANUP = "cleanup"
 DROP_ONLY = "drop-only"
 VALID_SCENARIOS = [CREATE, DROP, DROP_ONLY, CLEANUP]
+CHECKPOINT_TABLE = "ed0_opr.dbe_dpl_checkpoint"
 
 
 def _assert_valid_cc_scenario(self, attribute, value):
@@ -86,3 +87,7 @@ class ConditionalCreate:
 class PluginConfig:
     cc: ConditionalCreate = field(factory=ConditionalCreate)
     replacements: list[Replacement] = field(factory=list)
+    checkpoint_table: str = field(
+        default=CHECKPOINT_TABLE,
+        validator=_assert_not_empty_string,
+    )

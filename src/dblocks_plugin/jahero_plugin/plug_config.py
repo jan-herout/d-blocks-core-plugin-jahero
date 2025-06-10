@@ -72,7 +72,7 @@ def write_default_config(file: Path):
             default="Y",
         )
     if answer != "Y":
-        console.print("Canceled.", style="bold red")
+        cnsl.print("Canceled.", style="bold red")
         raise exc.DConfigError("missing plugin config")
 
     cfg = make_default_config()
@@ -118,4 +118,5 @@ def make_default_config() -> plug_model.PluginConfig:
                 )
             ],
         ),
+        checkpoint_table=plug_model.CHECKPOINT_TABLE,
     )
