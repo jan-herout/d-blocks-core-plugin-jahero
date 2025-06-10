@@ -86,6 +86,7 @@ class Dpl(plugin_model.PluginWalker):
                 statements.append(
                     _checkpoint_achieved(
                         checkpoint_table,
+                        batch_name,
                         checkpoint_label,
                     )
                 )
@@ -307,14 +308,19 @@ def _get_checkpoint_insert(
     )
 
 
-def _checkpoint_achieved(checkpoint_table: str, label: str) -> str:
+def _checkpoint_achieved(
+    checkpoint_table: str,
+    batch_name: str,
+    checkpoint_label: str,
+) -> str:
     return "\n".join(
         (
             "select count(1) "
             f"from {checkpoint_table} "
-            f"where checkpoint_label = '{label}' "
+            f"where checkpoint_label = '{checkpoint_label}' "
+            f"and batch_name = '{batch_name}' "
             "having count(1) > 0;",
-            f".IF ACTIVITYCOUNT > 0 THEN .GOTO {label};",
+            f".IF ACTIVITYCOUNT > 0 THEN .GOTO {checkpoint_label};",
         )
     )
 
