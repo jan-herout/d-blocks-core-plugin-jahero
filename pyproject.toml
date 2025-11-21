@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "d-blocks-core-plugin-jahero"
-version = "0.0.0"
+version = "0.3.0.6"
 description = "Plugins that I use daily in my work."
 authors = ["Jan Herout <jan.herout@gmail.com>"]
 license = "MIT"
